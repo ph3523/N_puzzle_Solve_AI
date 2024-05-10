@@ -31,13 +31,13 @@ class State:
         moves = []
         i = self.currentState.index(0)
         if i % n > 0: #! Acompanhar no debug
-            moves.append('L')
+            moves.append('esquerda')
         if i % n < n - 1:
-            moves.append('R')
+            moves.append('direita')
         if i - n >= 0:
-            moves.append('U')
+            moves.append('cima')
         if i + n < n * n:
-            moves.append('D')
+            moves.append('baixo')
         return moves
     
     def expand(self, n):
@@ -46,13 +46,13 @@ class State:
         for move in nextMoves:
             newState = self.currentState.copy()
             i = newState.index(0)
-            if move == 'L':
+            if move == 'esquerda':
                 newState[i], newState[i - 1] = newState[i - 1], newState[i]
-            elif move == 'R':
+            elif move == 'direita':
                 newState[i], newState[i + 1] = newState[i + 1], newState[i]
-            elif move == 'U':
+            elif move == 'cima':
                 newState[i], newState[i - n] = newState[i - n], newState[i]
-            elif move == 'D':
+            elif move == 'baixo':
                 newState[i], newState[i + n] = newState[i + n], newState[i]
             children.append(State(newState, self, move, self.depth + 1, 1, self.goalState))
         return children

@@ -1,6 +1,6 @@
-from include.estadoInicial import gerarEstadoInicial, solucionavel, printPuzzle
-from include.estado import State
-from include.algoritmos import bfs, dfs, aStar
+from estadoInicial import gerarEstadoInicial, solucionavel, printPuzzle
+from estado import State
+from algoritmos import bfs, dfs, aStar
 from time import time
 
 # Exemplo solucionavel [5, 6, 4, 3, 2, 7, 8, 1, 0]
