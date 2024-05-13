@@ -23,3 +23,8 @@ salvarResultadoJson("bfs", root, resultadoBfs, timeBfs)
 
 
 
+timeDfs = time()
+resultadoDfs = dfs(State(root, None, None, 0, 0, goal), n)
+timeDfs = time() - timeDfs
+print("Tempo de execução DFS: ", timeDfs)
+print("Resultado DFS:", resultadoDfs)

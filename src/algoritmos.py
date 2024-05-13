@@ -27,9 +27,31 @@ def bfs(currentState: State, n: int):
                 fronteira.put(filho)
     return
 
-def dfs():
+def dfs(currentState: State, n: int):
+    # Fila Last In First Out(LIFO)
+    if currentState.currentState == currentState.goalState:
+        return currentState
+    
+    fronteira = LifoQueue()
+    fronteira.put(currentState)
+    explorado = set()
 
-    return
+    while not fronteira.empty():
+        estado = fronteira.get()
+        max_profundidade = estado.depth
+        explorado.add(tuple(estado.currentState))
+
+        if max_profundidade == 30:
+            continue
+
+        noFilho = estado.expand(n)
+        for filho in noFilho:
+            if tuple(filho.currentState) not in explorado:
+                if filho.checkGoal():
+                    return filho.solution(), len(explorado)
+                fronteira.put(filho)
+
+    return (("Não foi possível encontrar a solução na profundidade delimitada."), len(explorado))
 
 def aStar():
 
