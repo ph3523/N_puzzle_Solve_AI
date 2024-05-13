@@ -1,2 +1,2 @@
-#N Puzzle Solver AI
+# N Puzzle Solver AI
 

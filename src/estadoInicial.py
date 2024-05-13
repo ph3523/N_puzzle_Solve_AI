@@ -1,5 +1,6 @@
 import random
-
+import os
+import json
 
 def gerarEstadoInicial(n):
     # Obter estado final
@@ -36,3 +37,50 @@ def printPuzzle(puzzle):
     n = int(len(puzzle) ** 0.5)
     for i in range(0, len(puzzle), n):
         print(puzzle[i: i + n])
+
+
+def salvarResultado(algoritmo, estadoInicial, resultado, tempo):
+    if not os.path.exists("resultados"):
+        os.makedirs("resultados")
+
+    with open(f"resultados/{algoritmo}", "w") as f:
+        f.write("Tempo de execução BFS: " + str(tempo) + "\n")
+        f.write("Resultado BFS: " + str(resultado[0]) + "\n")
+        f.write("Custo BFS: " + str(resultado[2]) + "\n\n")
+        f.write("Estado Inicial:\n\n")
+        for i in range(len(estadoInicial)):
+            f.write(str(estadoInicial[i]))
+            f.write(" ")
+            if i % 3 == 2:
+                f.write("\n")
+        f.write("\n")
+        for i in range(len(resultado[1])):
+            f.write(str(resultado[0][i]) + "\n")
+            for j in range(len(resultado[1][i])):
+                f.write(str(resultado[1][i][j]))
+                f.write(" ")
+                if j % 3 == 2:
+                    f.write("\n")
+            f.write("\n")
+
+def salvarResultadoJson(algoritmo, estadoInicial, resultado, tempo):
+    if not os.path.exists("resultados"):
+        os.makedirs("resultados")
+
+    data = {
+        "Tempo de execução BFS": str(tempo),
+        "Resultado BFS": str(resultado[0]),
+        "Custo BFS": str(resultado[2]),
+        "Estado Inicial": estadoInicial,
+        "Passos": []
+    }
+
+    for i in range(len(resultado[1])):
+        passo = {
+            "Ação": str(resultado[0][i]),
+            "Estado": resultado[1][i]
+        }
+        data["Passos"].append(passo)
+
+    with open(f"resultados/{algoritmo}.json", "w") as f:
+        json.dump(data, f, indent=4)

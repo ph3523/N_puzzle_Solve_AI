@@ -17,14 +17,17 @@ class State:
 
     def solution(self):
         solucao = []
+        tabuleiros = []
+        tabuleiros.append(self.currentState)
         solucao.append(self.direction)
         temp = self.lastState
         while temp.direction:
             solucao.append(temp.direction)
+            tabuleiros.append(temp.currentState)
             temp = temp.lastState
-        solucao = solucao[:-1] # Remove a direção do estado inicial
         solucao.reverse()
-        return solucao
+        tabuleiros.reverse()
+        return solucao, tabuleiros
     
     #todo: verificar necessidade tonar os metodos abaixo para static
     def availableMoves(self, n):
