@@ -44,9 +44,12 @@ def salvarResultado(algoritmo, estadoInicial, resultado, tempo):
         os.makedirs("resultados")
 
     with open(f"resultados/{algoritmo}", "w") as f:
-        f.write("Tempo de execução BFS: " + str(tempo) + "\n")
-        f.write("Resultado BFS: " + str(resultado[0]) + "\n")
-        f.write("Custo BFS: " + str(resultado[2]) + "\n\n")
+        if resultado is None:
+            f.write("Sem resultado utilizando " + algoritmo.upper() + "\n")
+            return
+        f.write(f"Tempo de execução {algoritmo}: " + str(tempo) + "\n")
+        f.write(f"Resultado {algoritmo}: " + str(resultado[0]) + "\n")
+        f.write(f"Custo {algoritmo}: " + str(resultado[2]) + "\n\n")
         f.write("Estado Inicial:\n\n")
         for i in range(len(estadoInicial)):
             f.write(str(estadoInicial[i]))
@@ -62,15 +65,16 @@ def salvarResultado(algoritmo, estadoInicial, resultado, tempo):
                 if j % 3 == 2:
                     f.write("\n")
             f.write("\n")
+    print(f"Arquivo salvo em resultados/{algoritmo}")
 
 def salvarResultadoJson(algoritmo, estadoInicial, resultado, tempo):
     if not os.path.exists("resultados"):
         os.makedirs("resultados")
 
     data = {
-        "Tempo de execução BFS": str(tempo),
-        "Resultado BFS": str(resultado[0]),
-        "Custo BFS": str(resultado[2]),
+        f"Tempo de execução {algoritmo}": str(tempo),
+        f"Resultado {algoritmo}": str(resultado[0]),
+        f"Custo {algoritmo}": str(resultado[2]),
         "Estado Inicial": estadoInicial,
         "Passos": []
     }

@@ -48,10 +48,11 @@ def dfs(currentState: State, n: int):
         for filho in noFilho:
             if tuple(filho.currentState) not in explorado:
                 if filho.checkGoal():
-                    return filho.solution(), len(explorado)
+                    resultado = filho.solution()
+                    return resultado[0], resultado[1], len(explorado)
                 fronteira.put(filho)
-
-    return (("Não foi possível encontrar a solução na profundidade delimitada."), len(explorado))
+    print("Não foi possível encontrar uma solução utlizando DFS")
+    return 
 
 def aStar():
 
