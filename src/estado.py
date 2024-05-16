@@ -15,6 +15,13 @@ class State:
     def checkGoal(self):
         return self.currentState == self.goalState
 
+    def misplacedTiles(self, n):
+        h = 0
+        for i in range(n * n):
+            if self.currentState[i] != self.goalState[i] and self.currentState[i] != 0:
+                h += 1
+        return h
+
     def solution(self):
         solucao = []
         tabuleiros = []
@@ -33,7 +40,7 @@ class State:
     def availableMoves(self, n):
         moves = []
         i = self.currentState.index(0)
-        if i % n > 0: #! Acompanhar no debug
+        if i % n > 0:
             moves.append('esquerda')
         if i % n < n - 1:
             moves.append('direita')

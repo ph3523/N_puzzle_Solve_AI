@@ -40,7 +40,7 @@ def dfs(currentState: State, n: int):
         estado = fronteira.get()
         max_profundidade = estado.depth
         explorado.add(tuple(estado.currentState))
-
+#fortnite(naotemnadaquifera)
         if max_profundidade == 30:
             continue
 
@@ -54,8 +54,28 @@ def dfs(currentState: State, n: int):
     print("Não foi possível encontrar uma solução utlizando DFS")
     return 
 
-def aStar():
+def aStar(currentState: State, n: int):
+    frontier = PriorityQueue()
+    explored = set()
+    counter = 0
+    root = currentState
+    evaluation = root.misplacedTiles(n)
+    frontier.put((evaluation, counter, root))
+    
+    while not frontier.empty():
+        currentNode = frontier.get()
+        currentNode = currentNode[2]
+        explored.add(tuple(currentNode.currentState))
 
+        if currentNode.checkGoal():
+            return currentNode.solution() + (len(explored),)
+        
+        children = currentNode.expand(n)
+        for child in children:
+            if tuple(child.currentState) not in explored:
+                counter += 1
+                evaluation = child.misplacedTiles(n)
+                frontier.put((evaluation, counter, child))
     return
 
 
