@@ -21,6 +21,15 @@ class State:
             if self.currentState[i] != self.goalState[i] and self.currentState[i] != 0:
                 h += 1
         return h
+    
+    def manhattanDistance(self, n):
+        h = 0
+        for i in range(n * n):
+            if self.currentState[i] != self.goalState[i] and self.currentState[i] != 0:
+                x, y = divmod(self.currentState.index(i), n)
+                xg, yg = divmod(self.goalState.index(i), n)
+                h += abs(x - xg) + abs(y - yg)
+        return h
 
     def solution(self):
         solucao = []
