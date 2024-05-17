@@ -1,4 +1,4 @@
-from estadoInicial import gerarEstadoInicial, solucionavel, printPuzzle, salvarResultado, salvarResultadoJson
+from utils import gerarEstadoInicial, solucionavel, printPuzzle, salvarResultado, salvarResultadoJson
 from estado import State
 from algoritmos import bfs, dfs, aStar
 from time import time 

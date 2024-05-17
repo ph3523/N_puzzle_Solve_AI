@@ -36,18 +36,17 @@ class State:
         tabuleiros.reverse()
         return solucao, tabuleiros
     
-    #todo: verificar necessidade tonar os metodos abaixo para static
     def availableMoves(self, n):
         moves = []
         i = self.currentState.index(0)
         if i % n > 0:
-            moves.append('esquerda')
+            moves.append('e')
         if i % n < n - 1:
-            moves.append('direita')
+            moves.append('d')
         if i - n >= 0:
-            moves.append('cima')
+            moves.append('c')
         if i + n < n * n:
-            moves.append('baixo')
+            moves.append('b')
         return moves
     
     def expand(self, n):
@@ -56,13 +55,13 @@ class State:
         for move in nextMoves:
             newState = self.currentState.copy()
             i = newState.index(0)
-            if move == 'esquerda':
+            if move == 'e':
                 newState[i], newState[i - 1] = newState[i - 1], newState[i]
-            elif move == 'direita':
+            elif move == 'd':
                 newState[i], newState[i + 1] = newState[i + 1], newState[i]
-            elif move == 'cima':
+            elif move == 'c':
                 newState[i], newState[i - n] = newState[i - n], newState[i]
-            elif move == 'baixo':
+            elif move == 'b':
                 newState[i], newState[i + n] = newState[i + n], newState[i]
             children.append(State(newState, self, move, self.depth + 1, 1, self.goalState))
         return children

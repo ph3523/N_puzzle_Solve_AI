@@ -6,14 +6,10 @@ def gerarEstadoInicial(n):
     # Obter estado final
     estadoInicial = list(range(1, n * n))
     estadoInicial.append(0)  # Peça vazia na última posição
-
     goal = estadoInicial.copy()
-    
-    # Embaralhar as peças
     for _ in range(n * n * 10):
         i, j = random.randrange(n * n), random.randrange(n * n)
         estadoInicial[i], estadoInicial[j] = estadoInicial[j], estadoInicial[i]
-
     return estadoInicial, goal
 
 
@@ -47,25 +43,30 @@ def salvarResultado(algoritmo, estadoInicial, resultado, tempo):
         if resultado is None:
             f.write("Sem resultado utilizando " + algoritmo.upper() + "\n")
             return
+        
         f.write(f"Tempo de execução {algoritmo}: " + str(tempo) + "\n")
         f.write(f"Resultado {algoritmo}: " + str(resultado[0]) + "\n")
         f.write(f"Custo {algoritmo}: " + str(resultado[2]) + "\n\n")
-        f.write("Estado Inicial:\n\n")
+        
+        f.write("Passo a passo:\n\n")
+        n = int(len(estadoInicial) ** 0.5)
         for i in range(len(estadoInicial)):
             f.write(str(estadoInicial[i]))
             f.write(" ")
-            if i % 3 == 2:
+            if i % n == n - 1:
                 f.write("\n")
         f.write("\n")
+
         for i in range(len(resultado[1])):
             f.write(str(resultado[0][i]) + "\n")
             for j in range(len(resultado[1][i])):
                 f.write(str(resultado[1][i][j]))
                 f.write(" ")
-                if j % 3 == 2:
+                if j % n == n - 1:
                     f.write("\n")
             f.write("\n")
-    print(f"Arquivo salvo em resultados/{algoritmo}")
+
+        print(f"Arquivo salvo em resultados/{algoritmo}.txt")
 
 def salvarResultadoJson(algoritmo, estadoInicial, resultado, tempo):
     if not os.path.exists("resultados"):
