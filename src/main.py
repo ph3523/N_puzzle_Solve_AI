@@ -22,7 +22,12 @@ resultadoDfs = dfs(State(root, None, None, 0, 0, goal), n)
 timeDfs = time() - timeDfs
 salvarResultado("dfs", root, resultadoDfs, timeDfs)
 
-timeAStar = time()
-resultadoAStar = aStar(State(root, None, None, 0, 0, goal), n)
-timeAStar = time() - timeAStar
-salvarResultado("aStar", root, resultadoAStar, timeAStar)
+timeAStarMisplaced = time()
+resultadoAStarMisplaced = aStar(State(root, None, None, 0, 0, goal), n, "misplaced")
+timeAStarMisplaced = time() - timeAStarMisplaced
+salvarResultado("aStarMisplaced", root, resultadoAStarMisplaced, timeAStarMisplaced)
+
+timeAStarManhattan = time()
+resultadoAStarManhattan = aStar(State(root, None, None, 0, 0, goal), n, "manhattan")
+timeAStarManhattan = time() - timeAStarManhattan
+salvarResultado("aStarManhattan", root, resultadoAStarManhattan, timeAStarManhattan)
