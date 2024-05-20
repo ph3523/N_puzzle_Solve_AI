@@ -1,6 +1,6 @@
 from utils import gerarEstadoInicial, solucionavel, printPuzzle, salvarResultado, salvarResultadoJson
 from estado import State
-from algoritmos import bfs, dfs, aStar
+from algoritmos import bfs, dfs, aStar, biAStar
 from time import time 
 import psutil
 import os
@@ -43,3 +43,10 @@ resultadoAStarManhattan = aStar(State(root, None, None, 0, 0, goal), n, "manhatt
 memAstarFinal = process.memory_info().rss/1024.0
 timeAStarManhattan = time() - timeAStarManhattan
 salvarResultado("aStarManhattan", root, resultadoAStarManhattan, timeAStarManhattan, memAstarFinal - memAstarInicial)
+
+memBiAStarInicial = process.memory_info().rss/1024.0
+timeBiAStar = time()
+resultadoBiAStar = biAStar(State(root, None, None, 0, 0, goal), State(goal, None, None, 0, 0, root), n, "missplaced")
+memBiAStarFinal = process.memory_info().rss/1024.0
+timeBiAStar = time() - timeBiAStar
+salvarResultado("biAStar", root, resultadoBiAStar, timeBiAStar, memBiAStarFinal - memBiAStarInicial)

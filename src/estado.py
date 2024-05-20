@@ -31,7 +31,7 @@ class State:
                 h += abs(x - xg) + abs(y - yg)
         return h
 
-    def solution(self):
+    def solution(self, reverse=True):
         solucao = []
         tabuleiros = []
         tabuleiros.append(self.currentState)
@@ -42,7 +42,8 @@ class State:
             tabuleiros.append(temp.currentState)
             temp = temp.lastState
         solucao.reverse()
-        tabuleiros.reverse()
+        if reverse:
+            tabuleiros.reverse()
         return solucao, tabuleiros
     
     def availableMoves(self, n):
