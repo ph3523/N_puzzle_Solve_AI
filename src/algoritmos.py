@@ -6,7 +6,6 @@ from queue import PriorityQueue
 
 # @profile
 def bfs(currentState: State, n: int):
-    # Fila de prioridade
     if currentState.currentState == currentState.goalState:
         return currentState.solution(), 0
 
@@ -28,7 +27,6 @@ def bfs(currentState: State, n: int):
     return
 
 def dfs(currentState: State, n: int):
-    # Fila Last In First Out(LIFO)
     if currentState.currentState == currentState.goalState:
         return currentState
     
@@ -40,7 +38,7 @@ def dfs(currentState: State, n: int):
         estado = fronteira.get()
         max_profundidade = estado.depth
         explorado.add(tuple(estado.currentState))
-#fortnite(naotemnadaquifera)
+
         if max_profundidade == 30:
             continue
 
@@ -77,5 +75,3 @@ def aStar(currentState: State, n: int, heuristic: str):
                 evaluation = child.misplacedTiles(n) if heuristic == 'misplaced' else child.manhattanDistance(n)
                 frontier.put((evaluation, counter, child))
     return
-
-
