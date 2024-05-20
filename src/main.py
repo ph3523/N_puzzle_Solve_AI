@@ -19,34 +19,34 @@ process = psutil.Process(os.getpid())
 memBfsInicial = process.memory_info().rss/1024.0
 timeBfs = time()
 resultadoBfs = bfs(State(root, None, None, 0, 0, goal), n)
-memBfsFinal = process.memory_info().rss/1024.0
 timeBfs = time() - timeBfs
+memBfsFinal = process.memory_info().rss/1024.0
 salvarResultado("bfs", root, resultadoBfs, timeBfs, memBfsFinal - memBfsInicial)
 
 memDfsInicial = process.memory_info().rss/1024.0
 timeDfs = time()
 resultadoDfs = dfs(State(root, None, None, 0, 0, goal), n)
-memDfsFinal = process.memory_info().rss/1024.0
 timeDfs = time() - timeDfs
+memDfsFinal = process.memory_info().rss/1024.0
 salvarResultado("dfs", root, resultadoDfs, timeDfs, memDfsFinal - memDfsInicial)
 
 memAstarInicial = process.memory_info().rss/1024.0
 timeAStarMisplaced = time()
 resultadoAStarMisplaced = aStar(State(root, None, None, 0, 0, goal), n, "misplaced")
-memAstarFinal = process.memory_info().rss/1024.0
 timeAStarMisplaced = time() - timeAStarMisplaced
+memAstarFinal = process.memory_info().rss/1024.0
 salvarResultado("aStarMisplaced", root, resultadoAStarMisplaced, timeAStarMisplaced, memAstarFinal - memAstarInicial)
 
 memAstarInicial = process.memory_info().rss/1024.0
 timeAStarManhattan = time()
 resultadoAStarManhattan = aStar(State(root, None, None, 0, 0, goal), n, "manhattan")
-memAstarFinal = process.memory_info().rss/1024.0
 timeAStarManhattan = time() - timeAStarManhattan
+memAstarFinal = process.memory_info().rss/1024.0
 salvarResultado("aStarManhattan", root, resultadoAStarManhattan, timeAStarManhattan, memAstarFinal - memAstarInicial)
 
 memBiAStarInicial = process.memory_info().rss/1024.0
 timeBiAStar = time()
 resultadoBiAStar = biAStar(State(root, None, None, 0, 0, goal), State(goal, None, None, 0, 0, root), n, "missplaced")
-memBiAStarFinal = process.memory_info().rss/1024.0
 timeBiAStar = time() - timeBiAStar
+memBiAStarFinal = process.memory_info().rss/1024.0
 salvarResultado("biAStar", root, resultadoBiAStar, timeBiAStar, memBiAStarFinal - memBiAStarInicial)

@@ -77,45 +77,39 @@ def aStar(currentState: State, n: int, heuristic: str):
     return
 
 def biAStar(startState: State, goalState: State, n: int, heuristic: str):
-    # Initialize two priority queues for the forward and backward searches
-    forward_frontier = PriorityQueue()
-    backward_frontier = PriorityQueue()
+    forwardFrontier = PriorityQueue()
+    backwardFrontier = PriorityQueue()
 
-    # Initialize two sets for the explored states
-    forward_explored = set()
-    backward_explored = set()
+    forwardExplored = set()
+    backwardExplored = set()
 
-    # Initialize counters for the forward and backward searches
-    forward_counter = 0
-    backward_counter = 0
+    forwardCounter = 0
+    backwardCounter = 0
 
-    # Add the start and goal states to the frontiers
-    forward_frontier.put((startState.misplacedTiles(n) if heuristic == 'misplaced' else startState.manhattanDistance(n), forward_counter, startState))
-    backward_frontier.put((goalState.misplacedTiles(n) if heuristic == 'misplaced' else goalState.manhattanDistance(n), backward_counter, goalState))
+    forwardFrontier.put((startState.misplacedTiles(n) if heuristic == 'misplaced' else startState.manhattanDistance(n), forwardCounter, startState))
+    backwardFrontier.put((goalState.misplacedTiles(n) if heuristic == 'misplaced' else goalState.manhattanDistance(n), backwardCounter, goalState))
 
-    while not forward_frontier.empty() and not backward_frontier.empty():
-        # Forward search
-        forward_node = forward_frontier.get()[2]
-        forward_explored.add(tuple(forward_node.currentState))
+    while not forwardFrontier.empty() and not backwardFrontier.empty():
+        forwardNode = forwardFrontier.get()[2]
+        forwardExplored.add(tuple(forwardNode.currentState))
 
-        if tuple(forward_node.currentState) in backward_explored:
-            return forward_node.solution() + (len(forward_explored) + len(backward_explored),)
+        if tuple(forwardNode.currentState) in backwardExplored:
+            return forwardNode.solution() + backwardNode.solution(False) + (len(forwardExplored) + len(backwardExplored),)
 
-        for child in forward_node.expand(n):
-            if tuple(child.currentState) not in forward_explored:
-                forward_counter += 1
-                forward_frontier.put((child.misplacedTiles(n) if heuristic == 'misplaced' else child.manhattanDistance(n), forward_counter, child))
+        for child in forwardNode.expand(n):
+            if tuple(child.currentState) not in forwardExplored:
+                forwardCounter += 1
+                forwardFrontier.put((child.misplacedTiles(n) if heuristic == 'misplaced' else child.manhattanDistance(n), forwardCounter, child))
 
-        # Backward search
-        backward_node = backward_frontier.get()[2]
-        backward_explored.add(tuple(backward_node.currentState))
+        backwardNode = backwardFrontier.get()[2]
+        backwardExplored.add(tuple(backwardNode.currentState))
 
-        if tuple(backward_node.currentState) in forward_explored:
-            return backward_node.solution(False) + (len(forward_explored) + len(backward_explored),)
+        if tuple(backwardNode.currentState) in forwardExplored:
+            return forwardNode.solution() + backwardNode.solution(False) + (len(forwardExplored) + len(backwardExplored),)
 
-        for child in backward_node.expand(n):
-            if tuple(child.currentState) not in backward_explored:
-                backward_counter += 1
-                backward_frontier.put((child.misplacedTiles(n) if heuristic == 'misplaced' else child.manhattanDistance(n), backward_counter, child))
+        for child in backwardNode.expand(n):
+            if tuple(child.currentState) not in backwardExplored:
+                backwardCounter += 1
+                backwardFrontier.put((child.misplacedTiles(n) if heuristic == 'misplaced' else child.manhattanDistance(n), backwardCounter, child))
 
     return
