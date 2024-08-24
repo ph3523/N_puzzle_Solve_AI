@@ -1,6 +1,10 @@
 import random
 import os
+import psutil
 import json
+from time import time
+from estado import State
+
 
 def gerarEstadoInicial(n):
     estadoInicial = list(range(1, n * n))
@@ -11,6 +15,7 @@ def gerarEstadoInicial(n):
         estadoInicial[i], estadoInicial[j] = estadoInicial[j], estadoInicial[i]
     return estadoInicial, goal
 
+
 def qtdInversoes(puzzle):
     inv = 0
     for i in range(len(puzzle) - 1):
@@ -19,16 +24,43 @@ def qtdInversoes(puzzle):
                 inv += 1
     return inv
 
+
 def solucionavel(puzzle):
     inv_counter = qtdInversoes(puzzle)
     if inv_counter % 2 == 0:
         return True
     return False
 
+
 def printPuzzle(puzzle):
     n = int(len(puzzle) ** 0.5)
     for i in range(0, len(puzzle), n):
         print(puzzle[i: i + n])
+
+
+def executarERegistrar(algoritmo_nome, algoritmo_func, estado_inicial, estado_final, n, *args):
+    process = psutil.Process(os.getpid())
+    mem_inicial = process.memory_info().rss / 1024.0
+    tempo_inicial = time()
+
+    if algoritmo_nome == "biAStar":
+        resultado = algoritmo_func(State(estado_inicial, None, None, 0, 0, estado_final),
+                                   State(estado_final, None, None, 0, 0, estado_inicial), n, *args)
+    else:
+        resultado = algoritmo_func(
+            State(estado_inicial, None, None, 0, 0, estado_final), n, *args)
+
+    mem_final = process.memory_info().rss / 1024.0
+    tempo_total = time() - tempo_inicial
+    salvarResultado(algoritmo_nome, estado_inicial, resultado, tempo_total, mem_final - mem_inicial)
+    salvarResultadoJson(algoritmo_nome, estado_inicial, resultado, tempo_total, mem_final - mem_inicial)
+    return {
+        "algoritmo": algoritmo_nome,
+        "tempo": tempo_total,
+        "memoria": mem_final - mem_inicial,
+        "resultado": resultado
+    }
+
 
 def salvarResultado(algoritmo, estadoInicial, resultado, tempo, memoria):
     movimentos = {
@@ -48,7 +80,7 @@ def salvarResultado(algoritmo, estadoInicial, resultado, tempo, memoria):
 
         f.write(f"Tempo de execucao {algoritmo}: {tempo:.4f} segundos\n")
         f.write(f"Resultado {algoritmo}: {', '.join([movimentos[mov] for mov in resultado[0]])}\n")
-        f.write(f"Custo {algoritmo}: {resultado[2]}\n\n")
+        f.write(f"Nos total {algoritmo}: {resultado[2]}\n\n")
         f.write(f"Memoria utilizada: {memoria} KB\n\n")
 
         f.write("Passo a passo:\n\n")
@@ -70,24 +102,30 @@ def salvarResultado(algoritmo, estadoInicial, resultado, tempo, memoria):
 
         print(f"Arquivo salvo em resultados/{algoritmo}.txt")
 
-def salvarResultadoJson(algoritmo, estadoInicial, resultado, tempo):
-    if not os.path.exists("resultados"):
-        os.makedirs("resultados")
 
-    data = {
-        f"Tempo de execução {algoritmo}": str(tempo),
-        f"Resultado {algoritmo}": str(resultado[0]),
-        f"Custo {algoritmo}": str(resultado[2]),
-        "Estado Inicial": estadoInicial,
-        "Passos": []
-    }
-
-    for i in range(len(resultado[1])):
-        passo = {
-            "Ação": str(resultado[0][i]),
-            "Estado": resultado[1][i]
+def salvarResultadoJson(algoritmo, estadoInicial, resultado, tempo, memoria=None):
+    if resultado is None:
+        resultado_json = {
+            "algoritmo": algoritmo,
+            "estadoInicial": estadoInicial,
+            "resultado": "Sem resultado",
+            "tempo": tempo,
+            "memoria": memoria
         }
-        data["Passos"].append(passo)
+    else:
+        resultado_json = {
+            "algoritmo": algoritmo,
+            "estadoInicial": estadoInicial,
+            f"Resultado {algoritmo}": str(resultado[0]),
+            f"Nos total {algoritmo}": resultado[2],
+            "tempo": tempo,
+            "memoria": memoria
+        }
 
-    with open(f"resultados/{algoritmo}.json", "w") as f:
-        json.dump(data, f, indent=4)
+    if not os.path.exists("resultadosJson"):
+        os.makedirs("resultadosJson")
+
+    with open(f"resultadosJson/{algoritmo}.json", "w") as f:
+        json.dump(resultado_json, f, indent=4)
+
+    print(f"Arquivo JSON salvo em resultadosJson/{algoritmo}.json")

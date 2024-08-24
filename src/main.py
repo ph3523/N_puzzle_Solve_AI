@@ -1,9 +1,8 @@
-from utils import gerarEstadoInicial, solucionavel, printPuzzle, salvarResultado, salvarResultadoJson
+# src/main.py
+from utils import gerarEstadoInicial, solucionavel, printPuzzle, salvarResultado, executarERegistrar
 from estado import State
 from algoritmos import bfs, dfs, aStar, biAStar
 from time import time 
-import psutil
-import os
 
 n = int(input("Insira o tamanho N do puzzle\n")) # Altere o valor para tabuleiro maior
 while (1):
@@ -14,39 +13,16 @@ while (1):
 print("Estado inicial:")
 printPuzzle(root)
 
-process = psutil.Process(os.getpid())
+resultados = []
+resultados.append(executarERegistrar("bfs", bfs, root, goal, n))
+resultados.append(executarERegistrar("dfs", dfs, root, goal, n))
+resultados.append(executarERegistrar("aStarMisplaced", aStar, root, goal, n, "misplaced"))
+resultados.append(executarERegistrar("aStarManhattan", aStar, root, goal, n, "manhattan"))
+resultados.append(executarERegistrar("biAStar", biAStar, root, goal, n, "misplaced"))
 
-memBfsInicial = process.memory_info().rss/1024.0
-timeBfs = time()
-resultadoBfs = bfs(State(root, None, None, 0, 0, goal), n)
-memBfsFinal = process.memory_info().rss/1024.0
-timeBfs = time() - timeBfs
-salvarResultado("bfs", root, resultadoBfs, timeBfs, memBfsFinal - memBfsInicial)
-
-memDfsInicial = process.memory_info().rss/1024.0
-timeDfs = time()
-resultadoDfs = dfs(State(root, None, None, 0, 0, goal), n)
-memDfsFinal = process.memory_info().rss/1024.0
-timeDfs = time() - timeDfs
-salvarResultado("dfs", root, resultadoDfs, timeDfs, memDfsFinal - memDfsInicial)
-
-memAstarInicial = process.memory_info().rss/1024.0
-timeAStarMisplaced = time()
-resultadoAStarMisplaced = aStar(State(root, None, None, 0, 0, goal), n, "misplaced")
-memAstarFinal = process.memory_info().rss/1024.0
-timeAStarMisplaced = time() - timeAStarMisplaced
-salvarResultado("aStarMisplaced", root, resultadoAStarMisplaced, timeAStarMisplaced, memAstarFinal - memAstarInicial)
-
-memAstarInicial = process.memory_info().rss/1024.0
-timeAStarManhattan = time()
-resultadoAStarManhattan = aStar(State(root, None, None, 0, 0, goal), n, "manhattan")
-memAstarFinal = process.memory_info().rss/1024.0
-timeAStarManhattan = time() - timeAStarManhattan
-salvarResultado("aStarManhattan", root, resultadoAStarManhattan, timeAStarManhattan, memAstarFinal - memAstarInicial)
-
-memBiAStarInicial = process.memory_info().rss/1024.0
-timeBiAStar = time()
-resultadoBiAStar = biAStar(State(root, None, None, 0, 0, goal), State(goal, None, None, 0, 0, root), n, "missplaced")
-memBiAStarFinal = process.memory_info().rss/1024.0
-timeBiAStar = time() - timeBiAStar
-salvarResultado("biAStar", root, resultadoBiAStar, timeBiAStar, memBiAStarFinal - memBiAStarInicial)
+# Comparar resultados
+for resultado in resultados:
+    print(f"Algoritmo: {resultado['algoritmo']}")
+    print(f"Tempo: {resultado['tempo']:.4f} segundos")
+    print(f"Memória: {resultado['memoria']:.2f} KB")
+    # print(f"Resultado: {resultado['resultado']}\n")
