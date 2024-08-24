@@ -62,9 +62,9 @@ class State:
     def expand(self, n):
         children = []
         nextMoves = self.availableMoves(n)
+        i = self.currentState.index(0)
         for move in nextMoves:
             newState = self.currentState.copy()
-            i = newState.index(0)
             if move == 'e':
                 newState[i], newState[i - 1] = newState[i - 1], newState[i]
             elif move == 'd':

@@ -20,7 +20,6 @@ resultados.append(executarERegistrar("aStarMisplaced", aStar, root, goal, n, "mi
 resultados.append(executarERegistrar("aStarManhattan", aStar, root, goal, n, "manhattan"))
 resultados.append(executarERegistrar("biAStar", biAStar, root, goal, n, "misplaced"))
 
-# Comparar resultados
 for resultado in resultados:
     print(f"Algoritmo: {resultado['algoritmo']}")
     print(f"Tempo: {resultado['tempo']:.4f} segundos")

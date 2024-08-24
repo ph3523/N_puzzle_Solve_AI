@@ -2,28 +2,27 @@ from estado import State
 from queue import Queue
 from queue import LifoQueue
 from queue import PriorityQueue
-# from memory_profiler import profile
+from collections import deque
 
-# @profile
 def bfs(currentState: State, n: int):
     if currentState.currentState == currentState.goalState:
         return currentState.solution(), 0
 
-    fronteira = Queue()
-    fronteira.put(currentState)
-    explorado = set()
+    fronteira = deque([currentState])  
+    explorado = {tuple(currentState.currentState)}  
 
-    while not fronteira.empty():
-        estado = fronteira.get()
-        explorado.add(tuple(estado.currentState))
-
+    while fronteira:
+        estado = fronteira.popleft()
+        
         noFilho = estado.expand(n)
         for filho in noFilho:
-            if tuple(filho.currentState) not in explorado:
+            filho_tuple = tuple(filho.currentState)
+            if filho_tuple not in explorado:
+                explorado.add(filho_tuple)
                 if filho.checkGoal():
                     resultado = filho.solution()
                     return resultado[0], resultado[1], len(explorado)
-                fronteira.put(filho)
+                fronteira.append(filho)
     return
 
 def dfs(currentState: State, n: int):
@@ -80,8 +79,6 @@ def biAStar(startState: State, goalState: State, n: int, heuristic: str):
     # Initialize two priority queues for the forward and backward searches
     forward_frontier = PriorityQueue()
     backward_frontier = PriorityQueue()
-
-    # Initialize two sets for the explored states
     forward_explored = set()
     backward_explored = set()
 
