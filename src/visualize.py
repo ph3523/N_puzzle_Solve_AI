@@ -22,9 +22,11 @@ def visualizarResultados(df):
     df['memoria'] = df['memoria'].apply(lambda x: float(x))
 
     df.plot(x='algoritmo', y='tempo', kind='bar', title='Tempo de Execução por Algoritmo')
-    plt.show()
+    plt.savefig(os.path.join('resultados', 'tempo_execucao.png'))
+    plt.close()
 
     df.plot(x='algoritmo', y='memoria', kind='bar', title='Memória Utilizada por Algoritmo')
-    plt.show()
+    plt.savefig(os.path.join('resultados', 'memoria_utilizada.png'))
+    plt.close()
 
 visualizarResultados(df)
