@@ -163,3 +163,5 @@ cython_debug/
 
 /resultados
 /src/resultados
+/resultadosJson
+/src/resultadosJson
